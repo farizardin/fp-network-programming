@@ -1,6 +1,8 @@
 import socket
 import os
 import json
+from Queue import Queue
+from user import  UserDB
 
 TARGET_IP = "127.0.0.1"
 TARGET_PORT = 8889
@@ -13,27 +15,29 @@ class ChatClient:
         self.sock.connect(self.server_address)
         self.tokenid=""
     def proses(self,cmdline):
-	j=cmdline.split(" ")
-	try:
-	    command=j[0].strip()
-	    if (command=='auth'):
-		username=j[1].strip()
-		password=j[2].strip()
-		return self.login(username,password)
-	    elif (command=='send'):
-		usernameto = j[1].strip()
+        j=cmdline.split(" ")
+        try:
+            command=j[0].strip()
+            if (command=='auth'):
+                username=j[1].strip()
+                password=j[2].strip()
+                return self.login(username,password)
+            # elif (command=='create'):
+            #     return self.buat('test', 'test')
+            elif (command=='send'):
+                usernameto = j[1].strip()
                 message=""
                 for w in j[2:]:
-                   message="{} {}" . format(message,w)
-		return self.sendmessage(usernameto,message)
+                    message="{} {}" . format(message,w)
+                return self.sendmessage(usernameto,message)
             elif (command=='inbox'):
                 return self.inbox()
             elif (command == 'logout'):
                 self.tokenid=""
-	    else:
-		return "*Maaf, command tidak benar"
-	except IndexError:
-	    return "-Maaf, command tidak benar"
+            else:
+                return "*Maaf, command tidak benar"
+        except IndexError:
+            return "-Maaf, command tidak benar"
     def sendstring(self,string):
         try:
             self.sock.sendall(string)
@@ -46,6 +50,8 @@ class ChatClient:
                         return json.loads(receivemsg)
         except:
             self.sock.close()
+    # def buat(self,username,password):
+    #     return self.user.crateUser(username,password)
     def login(self,username,password):
         string="auth {} {} \r\n" . format(username,password)
         result = self.sendstring(string)
@@ -78,6 +84,6 @@ class ChatClient:
 if __name__=="__main__":
     cc = ChatClient()
     while True:
-        cmdline = raw_input("Command {}:" . format(cc.tokenid))
+        cmdline = raw_input("Command {}:")
         print cc.proses(cmdline)
 
