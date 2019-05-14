@@ -1,7 +1,7 @@
 import socket
 import os
 import json
-
+from user import UserDB
 TARGET_IP = "127.0.0.1"
 TARGET_PORT = 8889
 
@@ -17,17 +17,23 @@ class ChatClient:
 	try:
 	    command=j[0].strip()
 	    if (command=='auth'):
-		username=j[1].strip()
-		password=j[2].strip()
-		return self.login(username,password)
+		    username=j[1].strip()
+		    password=j[2].strip()
+            # return self.user.auth(username,password)
+        return self.login(username,password)
+        
+        elif (command == 'create'):
+            return self.buat('test','test')
+
 	    elif (command=='send'):
-		usernameto = j[1].strip()
-                message=""
-                for w in j[2:]:
-                   message="{} {}" . format(message,w)
-		return self.sendmessage(usernameto,message)
-            elif (command=='inbox'):
-                return self.inbox()
+		    usernameto = j[1].strip()
+            message=""
+            for w in j[2:]:
+                message="{} {}" . format(message,w)
+		    return self.sendmessage(usernameto,message)
+        
+        elif (command=='inbox'):
+            return self.inbox()
             elif (command == 'logout'):
                 self.tokenid=""
 	    else:
@@ -47,13 +53,16 @@ class ChatClient:
         except:
             self.sock.close()
     def login(self,username,password):
-        string="auth {} {} \r\n" . format(username,password)
-        result = self.sendstring(string)
-        if result['status']=='OK':
-            self.tokenid=result['tokenid']
-            return "username {} logged in, token {} " .format(username,self.tokenid)
-        else:
-            return "Error, {}" . format(result['message'])
+        return self.user.auth(username,password)
+        # string="auth {} {} \r\n" . format(username,password)
+        # result = self.sendstring(string)
+        # if result['status']=='OK':
+        #     self.tokenid=result['tokenid']
+        #     return "username {} logged in, token {} " .format(username,self.tokenid)
+        # else:
+        #     return "Error, {}" . format(result['message'])
+    def buat(self,username,password):
+        return self.user.createUser(username, password)
     def sendmessage(self,usernameto="xxx",message="xxx"):
         if (self.tokenid==""):
             return "Error, not authorized"

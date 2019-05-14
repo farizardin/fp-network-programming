@@ -2,15 +2,18 @@ import sys
 import os
 import json
 import uuid
+from user import UserDB
 from Queue import *
-
 class Chat:
 	def __init__(self):
 		self.sessions={}
 		self.users = {}
-		self.users['fariz']={ 'nama': 'fariz', 'password': 'test', 'incoming' : {}, 'outgoing': {}}
-		self.users['ivan']={ 'nama': 'ivan', 'password': 'test', 'incoming': {}, 'outgoing': {}}
-		self.users['ai']={ 'nama': 'ai', 'password': 'test','incoming': {}, 'outgoing':{}}
+		# self.user.createUser("user", "user")
+		# self.user.createUser("test", "test")
+		
+		# self.users['fariz']={ 'nama': 'fariz', 'password': 'test', 'incoming' : {}, 'outgoing': {}}
+		# self.users['ivan']={ 'nama': 'ivan', 'password': 'test', 'incoming': {}, 'outgoing': {}}
+		# self.users['ai']={ 'nama': 'ai', 'password': 'test','incoming': {}, 'outgoing':{}}
 	def proses(self,data):
 		j=data.split(" ")
 		try:
