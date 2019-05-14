@@ -1,27 +1,10 @@
-    
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-"""
-Created on Sun May 12 14:34:42 2019
-@author: temperantia
-"""
 import uuid
+
 class User:
     def __init__(self, username, password):
         self.username = username
         self.password = password
-        self.chatroom = {}
-        
-    def getRoom(self):
-        msg = []
-        for keys in self.chatroom:
-            member = []
-            for user in self.chatroom[keys].member:
-                member.append(user.username)
-            temp = {"key" : keys, "member" : member}
-            msg.append(temp)
-        return msg
-        
+       
 class UserDB:
     def __init__(self):
         self.db = {}
